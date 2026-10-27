@@ -1,0 +1,11 @@
+# Local AI run artifacts
+ai-results/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# OS clutter
+Thumbs.db
+desktop.ini
+.DS_Store
