@@ -52,7 +52,8 @@ param(
     [switch]$DryRun,
     [switch]$NoRestorePoint,
     [switch]$NoElevate,
-    [switch]$Report
+    [switch]$Report,
+    [switch]$NoMenu
 )
 
 $script:Version      = '1.1.0'
@@ -1084,6 +1085,13 @@ function Invoke-UltraTweaks {
     )
     $n = Set-RegistryList -Items $shell
     Write-Log ('Ultra shell: {0} setting(s) processed (animations/thumbnails off).' -f $n) 'OK'
+
+    # --- Widgets / News and Interests: policy-level block, not just the taskbar button.
+    [void](Set-RegistryList -Items @(
+        @{ P = 'HKLM:\SOFTWARE\Policies\Microsoft\Dsh'; N = 'AllowNewsAndInterests'; V = 0; T = 'DWord' }
+        @{ P = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds'; N = 'EnableFeeds'; V = 0; T = 'DWord' }
+    ))
+    Write-Log 'Widgets / News and Interests blocked by policy.' 'OK'
 
     # --- Edge: no background process, no startup boost, sleep tabs sooner.
     $edge = @(
